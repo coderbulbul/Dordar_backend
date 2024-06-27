@@ -1,0 +1,129 @@
+// Import dependencies
+const axios = require("axios");
+const paymentModel = require("../models/paymentModel");
+const globals = require("node-global-storage");
+const { v4: uuidv4 } = require("uuid");
+
+class paymentController {
+  // Strore Bkash hearder info
+  bkash_headers = async () => {
+    return {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: globals.getValue("id_token"),
+      "X-App-Key": process.env.bkash_api_key,
+    };
+  };
+
+  // Bkash payment create controller
+  payment_create = async (req, res) => {
+    // Destructure from req.body
+    const { amount, userId } = req.body;
+    try {
+      const { data } = await axios.post(
+        process.env.bkash_create_payment_url,
+        {
+          // Request parameters
+          mode: "0011",
+          payerReference: " ",
+          callbackURL: "http://localhost:8000/bkash/payment/callback",
+          amount: amount,
+          currency: "BDT",
+          intent: "sale",
+          merchantInvoiceNumber: "Inv" + uuidv4().substring(0, 5),
+        },
+        {
+          // Request Headers
+          headers: await this.bkash_headers(),
+        }
+      );
+      // Return bkashURL
+      return res.status(200).json({ bkashURL: data.bkashURL });
+    } catch (error) {
+      return res.status(401).json({ erro: error.message });
+    }
+  };
+
+  // Bkash callback controller
+  call_back = async (req, res) => {
+    const { paymentID, status } = req.query;
+
+    // Bkash payment cancel or Fail
+    if (status === "cancel" || status === "failure") {
+      return res.redirect(`http://localhost:3000/error?message=${status}`);
+    }
+
+    // Bkash payment success
+    if (status === "success") {
+      try {
+        const { data } = await axios.post(
+          process.env.bkash_execute_payment_url,
+          {
+            // Request Parameters
+            paymentID,
+          },
+          {
+            // Request Headers
+            headers: await this.bkash_headers(),
+          }
+        );
+        if (data && data.statusCode === "0000") {
+          // Store payment data to database
+          await paymentModel.create({
+            userId: Math.random() * 10 + 1,
+            paymentID,
+            trxID: data.trxID,
+            date: data.paymentExecuteTime,
+            amount: data.amount,
+          });
+          // Redirect to success page
+          return res.redirect(`http://localhost:3000/success`);
+        } else {
+          // Redirect to error page
+          return res.redirect(
+            `http://localhost:3000/error?message=${data.statusMessage}`
+          );
+        }
+      } catch (error) {
+        // Redirect to error page
+        return res.redirect(
+          `http://localhost:3000/error?message=${error.message}`
+        );
+      }
+    }
+  };
+
+  // Bkash refund controller (Admin panel task)
+  refund = async (req, res) => {
+    // Get necessary data from database
+    const { trxID } = req.params;
+    // Make request to Bkash for refund
+    try {
+      const payment = await paymentModel.findOne({ trxID });
+      const { data } = await axios.post(
+        process.env.bkash_refund_transaction_url,
+        {
+          // Request parameters
+          paymentID: payment.paymentID,
+          amount: payment.amount,
+          trxID,
+          sku: "payment",
+          reason: "cashback ",
+        },
+        {
+          // Request headers
+          headers: await this.bkash_headers(),
+        }
+      );
+      // Response back
+      if (data && data === "0000") {
+        return res.status(200).json({ message: "refund success" });
+      }
+    } catch (error) {
+      return res.status(404).json({ message: "refund failed" });
+    }
+    // Redirect to refund successfull
+  };
+}
+
+module.exports = new paymentController();
