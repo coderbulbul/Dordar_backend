@@ -6,7 +6,12 @@ const paymentSchema = new Schema(
     amount: Number,
     trxID: String,
     paymentID: String,
-    data: String,
+    date: String,
+    name: String,
+    contact: Number,
+    thana: String,
+    district: String,
+    paymentType: String,
   },
   { timestamps: true }
 );

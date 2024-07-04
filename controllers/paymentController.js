@@ -18,7 +18,8 @@ class paymentController {
   // Bkash payment create controller
   payment_create = async (req, res) => {
     // Destructure from req.body
-    const { amount, userId } = req.body;
+    const { amount, customer } = req.body;
+    globals.setValue("customer", customer);
     try {
       const { data } = await axios.post(
         process.env.bkash_create_payment_url,
@@ -40,14 +41,16 @@ class paymentController {
       // Return bkashURL
       return res.status(200).json({ bkashURL: data.bkashURL });
     } catch (error) {
-      return res.status(401).json({ erro: error.message });
+      return res.status(401).json({ error: error.message });
     }
   };
 
   // Bkash callback controller
   call_back = async (req, res) => {
-    const { paymentID, status } = req.query;
+    // Receive form Data
+    const customerData = globals.getValue("customer");
 
+    const { paymentID, status } = req.query;
     // Bkash payment cancel or Fail
     if (status === "cancel" || status === "failure") {
       return res.redirect(`http://localhost:3000/error?message=${status}`);
@@ -67,14 +70,20 @@ class paymentController {
             headers: await this.bkash_headers(),
           }
         );
+        console.log(data);
         if (data && data.statusCode === "0000") {
-          // Store payment data to database
+          // Store customer & payment data to database
           await paymentModel.create({
             userId: Math.random() * 10 + 1,
+            amount: data.amount,
             paymentID,
             trxID: data.trxID,
             date: data.paymentExecuteTime,
-            amount: data.amount,
+            name: customerData.name,
+            contact: customerData.contact,
+            thana: customerData.thana,
+            district: customerData.district,
+            paymentType: customerData.paymentType,
           });
           // Redirect to success page
           return res.redirect(`http://localhost:3000/success`);
