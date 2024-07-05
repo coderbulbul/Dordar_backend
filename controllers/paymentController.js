@@ -27,7 +27,7 @@ class paymentController {
           // Request parameters
           mode: "0011",
           payerReference: " ",
-          callbackURL: "http://localhost:8000/bkash/payment/callback",
+          callbackURL: process.env.SERVER_URL + "/bkash/payment/callback",
           amount: amount,
           currency: "BDT",
           intent: "sale",
@@ -53,7 +53,7 @@ class paymentController {
     const { paymentID, status } = req.query;
     // Bkash payment cancel or Fail
     if (status === "cancel" || status === "failure") {
-      return res.redirect(`http://localhost:3000/error?message=${status}`);
+      return res.redirect(` ${process.env.CLIENT_URL}/error?message=${status}`);
     }
 
     // Bkash payment success
@@ -86,17 +86,17 @@ class paymentController {
             paymentType: customerData.paymentType,
           });
           // Redirect to success page
-          return res.redirect(`http://localhost:3000/success`);
+          return res.redirect(`${process.env.CLIENT_URL}/success`);
         } else {
           // Redirect to error page
           return res.redirect(
-            `http://localhost:3000/error?message=${data.statusMessage}`
+            `${process.env.CLIENT_URL}/error?message=${data.statusMessage}`
           );
         }
       } catch (error) {
         // Redirect to error page
         return res.redirect(
-          `http://localhost:3000/error?message=${error.message}`
+          `${process.env.CLIENT_URL}/error?message=${error.message}`
         );
       }
     }

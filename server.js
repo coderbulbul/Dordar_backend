@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(body_parser.json());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.FRONT_URL,
     credentials: true,
   })
 );
