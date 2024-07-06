@@ -1,5 +1,10 @@
 const Product = require("../models/product");
 
+const mainRoute = async (req, res) => {
+  // Just print hello
+  res.json({ greetings: "Hello World" });
+};
+
 const fetchProducts = async (req, res) => {
   // Find the notes
   const product = await Product.find();
@@ -84,6 +89,7 @@ const deleteProduct = async (req, res) => {
 };
 
 module.exports = {
+  mainRoute,
   fetchProducts,
   fetchProduct,
   createProduct,

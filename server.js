@@ -28,6 +28,7 @@ app.use(
 connectToDb();
 
 // Routing
+app.get("/", productController.mainRoute);
 app.get("/products", productController.fetchProducts);
 app.get("/products/:id", productController.fetchProduct);
 app.post("/products", productController.createProduct);
