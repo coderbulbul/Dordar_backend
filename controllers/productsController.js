@@ -2,7 +2,8 @@ const Product = require("../models/product");
 
 const mainRoute = async (req, res) => {
   // Just print hello
-  res.json({ greetings: "Hello World" });
+  console.log(process.env.bkash_username);
+  res.json({ greetings: process.env.bkash.bkash_username });
 };
 
 const fetchProducts = async (req, res) => {
