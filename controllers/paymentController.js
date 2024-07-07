@@ -17,6 +17,7 @@ class paymentController {
 
   // Route testing
   test = async (req, res) => {
+    console.log(globals.getValue("id_token"));
     const { amount, customer } = req.body;
     try {
       const { data } = await axios.post(
