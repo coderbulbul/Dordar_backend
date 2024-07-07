@@ -17,7 +17,7 @@ class paymentController {
 
   // Route testing
   test = (req, res) => {
-    return res.status(200).json({ test: "test" });
+    return res.status(200).json({ test: process.env.bkash_create_payment_url });
   };
 
   // Bkash payment create controller
