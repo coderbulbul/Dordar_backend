@@ -16,8 +16,32 @@ class paymentController {
   };
 
   // Route testing
-  test = (req, res) => {
-    return res.status(200).json({ test: process.env.bkash_create_payment_url });
+  test = async (req, res) => {
+    const { amount, customer } = req.body;
+    try {
+      const { data } = await axios.post(
+        process.env.bkash_create_payment_url,
+        {
+          // Request parameters
+          mode: "0011",
+          payerReference: " ",
+          callbackURL: process.env.SERVER_URL + "/bkash/payment/callback",
+          amount: amount,
+          currency: "BDT",
+          intent: "sale",
+          merchantInvoiceNumber: "Inv" + uuidv4().substring(0, 5),
+        },
+        {
+          // Request Headers
+          headers: await this.bkash_headers(),
+        }
+      );
+      // Return bkashURL
+      console.log(data);
+      return res.status(200).json({ bkashURL: data.bkashURL });
+    } catch (error) {
+      return res.status(401).json({ error: error.message });
+    }
   };
 
   // Bkash payment create controller
