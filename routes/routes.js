@@ -4,7 +4,11 @@ const paymentController = require("../controllers/paymentController");
 const middleware = require("../middleware/middleware");
 
 // Test Router
-router.post("/bkash/payment/test", paymentController.test);
+router.post(
+  "/bkash/payment/test",
+  middleware.bkash_auth,
+  paymentController.test
+);
 
 // Route Bkash payment create
 router.post(
