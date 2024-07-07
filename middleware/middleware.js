@@ -26,6 +26,7 @@ class middleware {
           },
         }
       );
+      console.log(data);
       // Store "id_token" value global storage
       globals.setValue("id_token", data.id_token, { protected: true });
       next();
