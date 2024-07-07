@@ -15,6 +15,11 @@ class paymentController {
     };
   };
 
+  // Route testing
+  test = (req, res) => {
+    return res.json({ test: "test" });
+  };
+
   // Bkash payment create controller
   payment_create = async (req, res) => {
     // Destructure from req.body
