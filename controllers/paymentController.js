@@ -39,7 +39,7 @@ class paymentController {
       );
       // Return bkashURL
       console.log(data);
-      return res.status(200).json({ bkashURL: data.bkashURL });
+      return res.status(200).json({ bkashURL: data });
     } catch (error) {
       return res.status(401).json({ error: error.message });
     }
