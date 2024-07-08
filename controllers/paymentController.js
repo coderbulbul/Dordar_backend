@@ -14,10 +14,8 @@ class paymentController {
       "X-App-Key": process.env.bkash_api_key,
     };
   };
-
   // Route testing
   test = async (req, res) => {
-    console.log(globals.getValue("id_token"));
     const { amount, customer } = req.body;
     try {
       const { data } = await axios.post(
@@ -26,7 +24,8 @@ class paymentController {
           // Request parameters
           mode: "0011",
           payerReference: " ",
-          callbackURL: process.env.SERVER_URL + "/bkash/payment/callback",
+          callbackURL:
+            "https://dordar-backend.vercel.app/bkash/payment/callback",
           amount: amount,
           currency: "BDT",
           intent: "sale",
