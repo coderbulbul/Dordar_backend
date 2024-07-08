@@ -87,7 +87,8 @@ class paymentController {
             paymentType: customerData.paymentType,
           });
           // Redirect to success page
-          return res.redirect("https://dordar-client.vercel.app/success");
+          window.location.href = process.env.CLIENT_URL + "/success";
+          // return res.redirect("https://dordar-client.vercel.app/success");
         } else {
           // Redirect to error page
           return res.redirect(
