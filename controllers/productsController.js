@@ -1,10 +1,7 @@
-const Product = require("../models/product");
+// Import dependencies
+const Product = require("../models/productModel");
 
-const mainRoute = async (req, res) => {
-  // Just print hello
-
-  res.json({ greetings: "Hello" });
-};
+// Controllers
 
 const fetchProducts = async (req, res) => {
   // Find the notes
@@ -83,14 +80,13 @@ const deleteProduct = async (req, res) => {
   const productId = req.params.id;
 
   // Delete the record
-  await Note.deleteOne({ _id: productId });
+  await Product.deleteOne({ _id: productId });
 
   // Respond
   res.json({ success: "Record Deleted" });
 };
 
 module.exports = {
-  mainRoute,
   fetchProducts,
   fetchProduct,
   createProduct,

@@ -7,16 +7,20 @@ if (process.env.NODE_ENV != "production") {
 const express = require("express");
 const cors = require("cors");
 const body_parser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const connectToDb = require("./config/connectToDb");
-const Product = require("./models/product");
-const productController = require("./controllers/productsController");
+const { notFound, errorHandler } = require("./middleware/errorMiddleware");
+
+const port = process.env.PORT || 5000;
 
 // Create an express app
 const app = express();
 
 // Configure express app
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(body_parser.json());
+app.use(cookieParser());
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
@@ -24,21 +28,18 @@ app.use(
   })
 );
 
-// Connect to database
+// Connect to DB
 connectToDb();
 
-// Routing
-app.get("/", productController.mainRoute);
-app.get("/products", productController.fetchProducts);
-app.get("/products/:id", productController.fetchProduct);
-app.post("/products", productController.createProduct);
-app.put("/products/:id", productController.updateProduct);
-app.delete("/products/:id", productController.deleteProduct);
-
-// Bkash Routes
+// Routes import from routes
 app.use("/", require("./routes/routes"));
 
-// Start our server
-app.listen(process.env.PORT, () =>
-  console.log(`App listening on port ${process.env.PORT} `)
-);
+// Server static files
+app.use("/images", express.static("images"));
+
+// Error handling
+app.use(notFound);
+app.use(errorHandler);
+
+// Listen to our server
+app.listen(port, () => console.log(`App listening on port ${port} `));
