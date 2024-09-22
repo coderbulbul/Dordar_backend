@@ -34,9 +34,6 @@ connectToDb();
 // Routes import from routes
 app.use("/", require("./routes/routes"));
 
-// Server static files
-app.use("/images", express.static("images"));
-
 // Error handling
 app.use(notFound);
 app.use(errorHandler);
