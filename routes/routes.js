@@ -1,8 +1,6 @@
 // Import dependencies
 const router = require("express").Router();
-const multer = require("multer");
 const middleware = require("../middleware/middleware");
-const { uploadStorage } = require("../utilites/imageUpload");
 const paymentController = require("../controllers/paymentController");
 const productController = require("../controllers/productsController");
 const {
@@ -13,6 +11,8 @@ const {
   updateUserProfile,
 } = require("../controllers/userController");
 const { protect } = require("../middleware/authMiddleware");
+const { uploadStorage } = require("../middleware/multerMiddleware");
+const cloudinary = require("../utilites/cloudinaryConfig");
 
 // Products Routing
 router.get("/products", productController.fetchProducts);
@@ -30,18 +30,26 @@ router
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
 
-// User Routing start
-
 // Routes for product Image upload
 router.post(
   "/upload-image",
   uploadStorage.single("image"),
-  (req, file, err) => {
-    if (err instanceof multer.MulterError) {
-      console.log("Muter error showing", err);
-    }
-    console.log("File upload done");
-    return file;
+  function (req, res) {
+    cloudinary.uploader.upload(req.file.path, function (err, result) {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: false,
+          message: "Error",
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "Upload done",
+        data: result,
+      });
+    });
   }
 );
 

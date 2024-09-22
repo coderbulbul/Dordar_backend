@@ -20,7 +20,7 @@ const fetchProduct = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
-  // Get the sent data off request body
+  // Get the sent data of request body
   const {
     productName,
     productVariant,
@@ -28,6 +28,7 @@ const createProduct = async (req, res) => {
     productStock,
     productDescription,
     productImage,
+    productImageUrl,
   } = req.body;
 
   // Create a product with it
@@ -38,6 +39,7 @@ const createProduct = async (req, res) => {
     productStock,
     productDescription,
     productImage,
+    productImageUrl,
   });
 
   // Respond with the new note
