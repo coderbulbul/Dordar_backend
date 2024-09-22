@@ -15,11 +15,11 @@ const { uploadStorage } = require("../middleware/multerMiddleware");
 const cloudinary = require("../utilites/cloudinaryConfig");
 
 // Products Routing
-router.get("/products", productController.fetchProducts);
-router.get("/products/:id", productController.fetchProduct);
-router.post("/products", productController.createProduct);
-router.put("/products/:id", productController.updateProduct);
-router.delete("/products/:id", productController.deleteProduct);
+router.get("/api/products", productController.fetchProducts);
+router.get("/api/products/:id", productController.fetchProduct);
+router.post("/api/products", productController.createProduct);
+router.put("/api/products/:id", productController.updateProduct);
+router.delete("/api/products/:id", productController.deleteProduct);
 
 // User Routing start
 router.post("/api/users", registerUser);
