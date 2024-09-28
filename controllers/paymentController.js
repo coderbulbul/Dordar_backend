@@ -134,6 +134,26 @@ class paymentController {
     }
     // Redirect to refund successfull
   };
+
+  // fetch all orders data
+  fetchOrders = async (req, res) => {
+    // Find the notes
+    const product = await paymentModel.find();
+    // Respond with them
+    res.json({ product });
+  };
+
+  // Delete Order
+  deleteOrder = async (req, res) => {
+    // Get id off url
+    const orderId = req.params.id;
+
+    // Delete the record
+    await paymentModel.deleteOne({ _id: orderId });
+
+    // Respond
+    res.json({ success: "Record Deleted" });
+  };
 }
 
 module.exports = new paymentController();

@@ -77,4 +77,8 @@ router.get(
   paymentController.refund
 );
 
+// Route for fetch orders data
+router.get("/api/payment/orders", paymentController.fetchOrders);
+router.delete("/api/payment/orders/:id", paymentController.deleteOrder);
+
 module.exports = router;
