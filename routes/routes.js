@@ -35,21 +35,24 @@ router.post(
   "/upload-image",
   uploadStorage.single("image"),
   function (req, res) {
-    cloudinary.uploader.upload(req.file.path, function (err, result) {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({
-          success: false,
-          message: "Error",
+    try {
+      cloudinary.uploader.upload(req.file.path, function (err, result) {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({
+            success: false,
+            message: "Error",
+          });
+        }
+        res.status(200).json({
+          success: true,
+          message: "Upload done successfully",
+          data: result,
         });
-      }
-
-      res.status(200).json({
-        success: true,
-        message: "Upload done",
-        data: result,
       });
-    });
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 
