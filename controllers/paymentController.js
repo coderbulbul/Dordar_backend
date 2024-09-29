@@ -87,7 +87,7 @@ class paymentController {
             paymentType: customerData.paymentType,
           });
           // Redirect to success page
-          return res.redirect(301, `${process.env.CLIENT_URL}/success`);
+          return res.redirect(301, `${process.env.CLIENT_URL}`);
         } else {
           // Redirect to error page
           return res.redirect(
