@@ -84,6 +84,7 @@ class paymentController {
             contact: customerData.contact,
             thana: customerData.thana,
             district: customerData.district,
+            address: customerData.fullAddress,
             paymentType: customerData.paymentType,
           });
           // Redirect to success page

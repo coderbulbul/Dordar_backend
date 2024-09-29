@@ -11,6 +11,7 @@ const paymentSchema = new Schema(
     contact: Number,
     thana: String,
     district: String,
+    address: String,
     paymentType: String,
   },
   { timestamps: true }
