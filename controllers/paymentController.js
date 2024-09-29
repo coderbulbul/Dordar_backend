@@ -86,6 +86,7 @@ class paymentController {
             district: customerData.district,
             address: customerData.fullAddress,
             paymentType: customerData.paymentType,
+            productName: customerData.productName,
           });
           // Redirect to success page
           return res.redirect(301, `${process.env.CLIENT_URL}`);

@@ -13,6 +13,7 @@ const paymentSchema = new Schema(
     district: String,
     address: String,
     paymentType: String,
+    productName: String,
   },
   { timestamps: true }
 );
