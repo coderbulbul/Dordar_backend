@@ -28,7 +28,7 @@ class paymentController {
           mode: "0011",
           payerReference: " ",
           callbackURL:
-            "https://dordar-backend.vercel.app/bkash/payment/callback",
+            "https://dordarbackend-production.up.railway.app/bkash/payment/callback",
           amount: amount,
           currency: "BDT",
           intent: "sale",
