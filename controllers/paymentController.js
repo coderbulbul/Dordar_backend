@@ -80,13 +80,13 @@ class paymentController {
             paymentID,
             trxID: data.trxID,
             date: data.paymentExecuteTime,
+            productName: data.productName,
             name: customerData.name,
             contact: customerData.contact,
             thana: customerData.thana,
             district: customerData.district,
             address: customerData.fullAddress,
             paymentType: customerData.paymentType,
-            productName: customerData.productName,
           });
           // Redirect to success page
           return res.redirect(301, `${process.env.CLIENT_URL}`);
